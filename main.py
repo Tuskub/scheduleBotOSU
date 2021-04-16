@@ -89,4 +89,5 @@ async def any_types_send(msg: aiogram.types.Message):
 
 
 if __name__ == '__main__':
+    # 123
     aiogram.executor.start_polling(dp)
