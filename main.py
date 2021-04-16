@@ -4,9 +4,12 @@ from aiogram.types.message import ContentType
 from aiogram.utils.markdown import text
 
 import logging, re
+import time
 
 from configure import BOT_TOKEN
 import key as kb
+
+from src.search.search import Search
 
 logging.basicConfig(level=logging.INFO)
 
@@ -72,8 +75,17 @@ async def command_notif(msg: aiogram.types.Message):
 # Выдача информации при отправке юзвером любого сообщения
 @dp.message_handler(content_types=ContentType.ANY)
 async def any_types_send(msg: aiogram.types.Message):
-    await bot.send_message(msg.from_user.id, '😐 Неизвестный запрос!\n'
-                                             'Воспользуйтесь /help')
+    full_name = msg.text.split(' ')
+    surname = full_name[0]
+    if surname == 'куз':
+        time.sleep(15)
+    name = '' if len(full_name) < 2 else full_name[1]
+    patronymic = '' if len(full_name) < 3 else full_name[2]
+    test = Search()
+    teachers = test.teachers_by_name(name, surname, patronymic)
+    await bot.send_message(msg.from_user.id, teachers)
+    # await bot.send_message(msg.from_user.id, '😐 Неизвестный запрос!\n'
+    #                                          'Воспользуйтесь /help')
 
 
 if __name__ == '__main__':
